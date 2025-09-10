@@ -20,39 +20,39 @@ record Product(
     String name,
     BigDecimal price,
     String category,
-    String priceRange // This field will be populated during transformation
+    String priceRange
 ) {
     /**
-     * Creates a new Product instance with a modified price.
+     * New Product instance with a modified price.
      * @param newPrice The new price to set.
-     * @return A new Product object with the updated price.
+     * @return new Product object with the updated price.
      */
     public Product withPrice(BigDecimal newPrice) {
         return new Product(this.productId, this.name, newPrice, this.category, this.priceRange);
     }
 
     /**
-     * Creates a new Product instance with a modified category.
+     * New Product instance with a modified category.
      * @param newCategory The new category to set.
-     * @return A new Product object with the updated category.
+     * @return new Product object with the updated category.
      */
     public Product withCategory(String newCategory) {
         return new Product(this.productId, this.name, this.price, newCategory, this.priceRange);
     }
 
     /**
-     * Creates a new Product instance with a modified name.
+     * New Product instance with a modified name.
      * @param newName The new name to set.
-     * @return A new Product object with the updated name.
+     * @return new Product object with the updated name.
      */
     public Product withName(String newName) {
         return new Product(this.productId, newName, this.price, this.category, this.priceRange);
     }
 
     /**
-     * Creates a new Product instance with the priceRange field populated.
+     * New Product instance with the priceRange field populated.
      * @param newPriceRange The calculated price range.
-     * @return A new Product object with the price range.
+     * @return new Product object with the price range.
      */
     public Product withPriceRange(String newPriceRange) {
         return new Product(this.productId, this.name, this.price, this.category, newPriceRange);
@@ -60,13 +60,13 @@ record Product(
 
     /**
      * Formats the Product record into a CSV string for output.
-     * @return A comma-separated string.
+     * @return comma-separated string.
      */
     public String toCsvString() {
         return String.join(",",
             String.valueOf(productId),
             name,
-            price.toPlainString(), // Use toPlainString to avoid scientific notation
+            price.toPlainString(),
             category,
             priceRange
         );
@@ -90,7 +90,7 @@ public class ETLPipeline {
         long rowsRead = 0;
         long rowsTransformed = 0;
 
-        // --- EXTRACT ---
+        // --- Step 1: Extract ---
         List<Product> products = new ArrayList<>();
         String header;
 
@@ -101,7 +101,7 @@ public class ETLPipeline {
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-            header = reader.readLine(); // Read header
+            header = reader.readLine();
             String line;
             while ((line = reader.readLine()) != null) {
                 rowsRead++;
@@ -111,7 +111,7 @@ public class ETLPipeline {
                     fields[1],
                     new BigDecimal(fields[2]),
                     fields[3],
-                    null // PriceRange is initially null
+                    null // PriceRange initially null
                 );
                 products.add(p);
             }
@@ -121,19 +121,17 @@ public class ETLPipeline {
             return; // For compiler, as exit terminates
         }
         
-        // --- TRANSFORM ---
+        // --- Step 2: Transform ---
         List<Product> transformedProducts = products.stream()
             .map(ETLPipeline::transformProduct)
             .collect(Collectors.toList());
         rowsTransformed = transformedProducts.size();
 
-        // --- LOAD ---
+        // --- Step 3: Load ---
         try {
-            // Ensure the output directory exists
             new File(OUTPUT_DIR).mkdirs(); 
             
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-                // Write the new header with the added column
                 writer.write(header + ",PriceRange");
                 writer.newLine();
                 
@@ -147,7 +145,6 @@ public class ETLPipeline {
             System.exit(1);
         }
 
-        // --- SUMMARY ---
         System.out.println("ETL Process Completed Successfully.");
         System.out.println("---------------------------------");
         System.out.println("Rows read: " + rowsRead);
@@ -158,17 +155,17 @@ public class ETLPipeline {
     /**
      * Applies all transformation logic to a single Product record.
      * The order of operations is critical.
-     * @param product The original product record.
-     * @return The fully transformed product record.
+     * @param product original product record.
+     * @return fully transformed product record.
      */
     private static Product transformProduct(Product product) {
         Product currentProduct = product;
         String originalCategory = product.category();
 
-        // 1. Convert product name to UPPERCASE
+        // Converts product name to uppercase
         currentProduct = currentProduct.withName(currentProduct.name().toUpperCase());
 
-        // 2. Apply 10% discount for "Electronics"
+        // Applies discount for Electronics
         if (originalCategory.equalsIgnoreCase("Electronics")) {
             BigDecimal discountedPrice = currentProduct.price()
                 .multiply(new BigDecimal("0.90"))
@@ -176,13 +173,13 @@ public class ETLPipeline {
             currentProduct = currentProduct.withPrice(discountedPrice);
         }
 
-        // 3. Recategorize to "Premium Electronics" if conditions are met
+        // Recategorizes to "Premium Electronics" if conditions are met
         if (originalCategory.equalsIgnoreCase("Electronics") &&
             currentProduct.price().compareTo(new BigDecimal("500.00")) > 0) {
             currentProduct = currentProduct.withCategory("Premium Electronics");
         }
 
-        // 4. Add the new PriceRange field based on the FINAL price
+        // Adds new PriceRange field based on final price
         String priceRange;
         BigDecimal finalPrice = currentProduct.price();
         if (finalPrice.compareTo(new BigDecimal("10.00")) <= 0) {

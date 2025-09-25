@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 /**
  * Orchestrates the entire Extract, Transform, and Load (ETL) process.
- * This single file contains all necessary classes and logic to run the pipeline.
- * It uses static nested classes to encapsulate the logic for each ETL stage.
+ * Contains all necessary classes and logic to run the pipeline.
+ * Uses static nested classes to encapsulate the logic for each ETL stage.
  */
 public class OOETL {
 

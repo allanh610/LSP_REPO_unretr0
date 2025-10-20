@@ -1,7 +1,7 @@
 package org.howard.edu.lsp.midterm.question4;
 
 /**
- * Represents a network-connected and battery-powered smart door lock
+ * Network-connected and battery-powered door lock
  */
 public class DoorLock extends Device implements Networked, BatteryPowered {
     private int batteryPercent;

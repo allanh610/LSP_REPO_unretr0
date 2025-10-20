@@ -1,7 +1,7 @@
 package org.howard.edu.lsp.midterm.question4;
 
 /**
- * Represents a network-connected smart thermostat
+ * Network-connected thermostat
  */
 public class Thermostat extends Device implements Networked {
     private double temperatureC;

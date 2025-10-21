@@ -1,18 +1,11 @@
 package org.howard.edu.lsp.midterm.question4;
 
 /**
- * Network-connected and battery-powered camera
+ * Network-connected and battery-powered camera.
  */
 public class Camera extends Device implements Networked, BatteryPowered {
     private int batteryPercent;
 
-    /**
-     * Constructs a Camera device.
-     *
-     * @param id             the unique identifier
-     * @param location       the physical location
-     * @param initialBattery the initial battery percentage
-     */
     public Camera(String id, String location, int initialBattery) {
         super(id, location);
         this.setBatteryPercent(initialBattery); // Use setter for validation

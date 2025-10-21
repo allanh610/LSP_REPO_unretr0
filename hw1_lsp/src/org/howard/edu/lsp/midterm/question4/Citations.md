@@ -4,12 +4,12 @@ Me: I'm working on a Java assignment involving inheritance and interfaces, and I
 
 Gemini: Of course! Understanding the design principles behind inheritance and interfaces is key to writing good object-oriented code. Here’s a breakdown of the core concepts.
 
-## Inheritance (is-a relationship)
+Inheritance (is-a relationship)
 Think of inheritance as creating an "is-a" relationship between classes. The subclass (or child class) is a more specific version of the superclass (or parent class). It's used to share common code and establish a direct hierarchy.
 
 Of course! Understanding the design principles behind inheritance and interfaces is key to writing good object-oriented code. Here’s a breakdown of the core concepts.
 
-## Inheritance (is-a relationship)
+Inheritance (is-a relationship)
 Think of inheritance as creating an "is-a" relationship between classes. The subclass (or child class) is a more specific version of the superclass (or parent class). It's used to share common code and establish a direct hierarchy.
 
 A subclass inherits all the non-private fields and methods from its parent, allowing you to reuse code and create specialized versions of a general class.
@@ -19,7 +19,7 @@ A subclass inherits all the non-private fields and methods from its parent, allo
 - Analogy: A GoldenRetriever is-a Dog, and a Dog is-a Animal. The GoldenRetriever class inherits traits from Dog (like bark()) which in turn inherits traits from Animal (like eat()).
 ...
 
-## Interface (can-do relationship)
+Interface (can-do relationship)
 An interface defines a "can-do" relationship. It's a contract that specifies what a class can do, without saying how it does it. It contains method signatures that any class can promise to implement.
 
 Interfaces are used to define a common capability that can be shared by completely unrelated classes. This is a powerful way to achieve abstraction and polymorphism.
@@ -61,7 +61,7 @@ Great question! This design pattern is extremely common and powerful in object-o
 
 In short, the abstract class defines the core identity of what something is, while interfaces define optional capabilities that something can do.
 
-## The Abstract Device Class: Core Identity 💡
+The Abstract Device Class: Core Identity 💡
 An abstract class acts as a blueprint for a group of related classes. The key reason to make Device abstract is that "Device" itself is just a concept, not something you can actually create. You can't go to a store and buy "a device"; you buy a specific type of device, like a door lock, a smart outlet, or a thermostat.
 
 Advantages of making Device abstract:
@@ -75,7 +75,7 @@ Prevents Illogical Objects: By making the class abstract, you prevent a programm
 A DoorLock is a Device. This is its fundamental identity.
 ...
 
-## Interfaces: Optional "Can-Do" Capabilities
+Interfaces: Optional "Can-Do" Capabilities
 The purpose of using interfaces like Networked and BatteryPowered is to provide flexibility. Not all devices have the same capabilities. Forcing every method into the base Device class would create a rigid and bloated system.
 
 Think about these examples:
